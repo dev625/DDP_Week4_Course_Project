@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>World Cup Predictor Application</title>
+  <meta charset="utf-8">
+  <meta name="description" content="World Cup Predictor Application">
+  <meta name="author" content="Devesh Lohumi">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+
+  
+  <!-- Grab CDN jQuery, fall back to local if offline -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery.js"><\/script>')</script> 
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+  
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+        <slide class="title-slide segue nobackground">
+  
+  <hgroup class="auto-fadein">
+    <h1>World Cup Predictor Application</h1>
+    <h2>Is it possible to beat India in the Data Science Cricket World Cup ?</h2>
+    <p>Devesh Lohumi<br/></p>
+  </hgroup>
+  
+  <article></article>  
+  
+</slide>
+    
+
+    <!-- SLIDES -->
+    <slide class="" id="slide-1" style="background:#ECF9F9;">
+  
+  <hgroup>
+    <h2>Why to use this application ?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>In the mystical world of Data Science, we have this famous Cricket World Cup.</li>
+<li>So far Team India is leading with 63 points.</li>
+<li>There are a lot of Cricket Fans Across the World, and they would love to see their respective teams win as well. </li>
+<li>This application helps these fans to play with their imaginations
+and put in their predictions to see how many points their team
+requires to win the World Cup.</li>
+<li>This application can be further incorporated with online Sports websites to keep the users engaged.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:#ECF9F9;">
+  
+  <hgroup>
+    <h2>The ui.R file</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>This file uses the fluidPage layout.</li>
+<li>We have used tabSetPanel to put all the information in a modular fashion in different tabs so as to not cram data in a single page.</li>
+<li>We have used Radio Buttons in the application to take user input instead of text input so that giving input is faster and more convenient.</li>
+</ul>
+
+<pre><code class="r">radioButtons(&quot;pakistan&quot;, &quot;24/11 - India vs Pakistan&quot;,
+                                              c(&quot;India Win&quot; = &quot;win&quot;,
+                                                &quot;Draw&quot; = &quot;draw&quot;,
+                                                &quot;India Loss&quot; = &quot;loss&quot;), inline=TRUE)
+</code></pre>
+
+<ul>
+<li>The results are shown as lines of text in the End of Tournament Tab Panel.</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:#ECF9F9;">
+  
+  <hgroup>
+    <h2>The server.R file</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>We store the results in a dataframe in the server.R file for easy server side calculations. We use the Shiny function renderDataTable which gives Table output with the help of JavaScript library DataTables.</li>
+</ul>
+
+<pre><code class="r">output$lTable &lt;- renderDataTable(leagueTable, options=list(paging = FALSE, 
+                                                           searching = FALSE))
+</code></pre>
+
+<ul>
+<li>switch function is used to turn the radio button text input to a numerical value.</li>
+</ul>
+
+<pre><code class="r">aus &lt;- reactive({
+                        switch(input$aus, &quot;win&quot; = 3, 
+                                                  &quot;draw&quot; = 1, 
+                                                  &quot;loss&quot; = 0)
+                })
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:#ECF9F9;">
+  
+  <hgroup>
+    <h2>How are the Calculations Done ?</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li>The points are assigned to each fixture similar to this. Then India&#39;s total points are calculated:</li>
+</ul>
+
+<pre><code class="r">pak &lt;- 3; aus &lt;- 1; eng &lt;- 3; saf &lt;- 3; sri &lt;- 0; ban &lt;- 1; 
+afg &lt;- 3; nz &lt;- 3; wi &lt;- 1; 
+</code></pre>
+
+<pre><code class="r">totPoints &lt;- 63 + pak + aus + eng + saf + sri + ban + afg + nz + wi ;
+totPoints
+</code></pre>
+
+<pre><code>## [1] 81
+</code></pre>
+
+<ul>
+<li>After this, the points another team (example,Australia) requires to win can be calculated</li>
+</ul>
+
+<pre><code class="r">AustraliaNeed &lt;- totPoints - 58 + 1;
+AustraliaNeed
+</code></pre>
+
+<pre><code>## [1] 24
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+<slide class="class" id="id" style="background:#ECF9F9;">
+  
+  <hgroup>
+    <h2>Improvements Possible</h2>
+  </hgroup>
+  
+  <article data-timings="">
+    <ul>
+<li><p>Currently, this data is manually set. To be used in real life, this Data can be fetched from a Sports API which would then give real time accurate results.</p></li>
+<li><p>Moreover, a bar chart can be created for a better visual comparsion of the teams&#39; scores.</p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+  
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+  <div class="pagination pagination-small" id='io2012-ptoc' style="display:none;">
+    <ul>
+      
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=1 title='Why to use this application ?'>
+         1
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=2 title='The ui.R file'>
+         2
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=3 title='The server.R file'>
+         3
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=4 title='How are the Calculations Done ?'>
+         4
+      </a>
+    </li>
+    
+    <li>
+      <a href="#" target="_self" rel='tooltip' 
+        data-slide=5 title='Improvements Possible'>
+         5
+      </a>
+    </li>
+    
+    </ul>
+  </div>  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+  <!-- Load Javascripts for Widgets -->
+  
+  <!-- LOAD HIGHLIGHTER JS FILES -->
+  <script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <!-- DONE LOADING HIGHLIGHTER JS FILES -->
+   
+  </html>
